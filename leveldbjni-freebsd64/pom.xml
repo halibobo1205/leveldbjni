@@ -41,7 +41,7 @@
 
   <groupId>org.fusesource.leveldbjni</groupId>
   <artifactId>leveldbjni-freebsd64</artifactId>
-  <version>99-master-SNAPSHOT</version>
+  <version>1.8</version>
 
   <name>${project.artifactId}</name>
   <description>The leveldbjni freebsd 64 native libraries</description>
@@ -50,7 +50,7 @@
     <dependency>
       <groupId>org.fusesource.leveldbjni</groupId>
       <artifactId>leveldbjni</artifactId>
-      <version>99-master-SNAPSHOT</version>
+      <version>1.8</version>
     </dependency>
   </dependencies>
 
