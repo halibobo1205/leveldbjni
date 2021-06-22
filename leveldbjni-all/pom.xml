@@ -59,7 +59,7 @@
       <version>1.8</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
+   <!-- <dependency>
       <groupId>org.fusesource.leveldbjni</groupId>
       <artifactId>leveldbjni-linux32</artifactId>
       <version>1.8</version>
@@ -70,14 +70,14 @@
       <artifactId>leveldbjni-linux64</artifactId>
       <version>1.8</version>
       <scope>provided</scope>
-    </dependency>
+    </dependency>-->
 <!--    <dependency>
       <groupId>org.fusesource.leveldbjni</groupId>
       <artifactId>leveldbjni-freebsd64</artifactId>
       <version>1.8</version>
       <scope>provided</scope>
     </dependency>-->
-    <dependency>
+   <!-- <dependency>
       <groupId>org.fusesource.leveldbjni</groupId>
       <artifactId>leveldbjni-win32</artifactId>
       <version>1.8</version>
@@ -88,7 +88,7 @@
       <artifactId>leveldbjni-win64</artifactId>
       <version>1.8</version>
       <scope>provided</scope>
-    </dependency>
+    </dependency>-->
 <!--    <dependency>
       <groupId>org.fusesource.leveldbjni</groupId>
       <artifactId>leveldbjni-sunos64-amd64</artifactId>
@@ -107,12 +107,12 @@
       <version>1.8</version>
       <scope>provided</scope>
     </dependency> -->
-    <dependency>
+    <!--<dependency>
       <groupId>org.fusesource.leveldbjni</groupId>
       <artifactId>leveldbjni-linux64-aarch64</artifactId>
       <version>1.8</version>
       <scope>provided</scope>
-    </dependency>
+    </dependency>-->
 
 
   </dependencies>
@@ -144,17 +144,17 @@
             </Embed-Dependency>
             <Embed-Transitive>true</Embed-Transitive>
             <Bundle-NativeCode>
-              META-INF/native/windows32/leveldbjni.dll;osname=Win32;processor=x86,
-              META-INF/native/windows64/leveldbjni.dll;osname=Win32;processor=x86-64,
-              META-INF/native/osx/libleveldbjni.jnilib;osname=macosx;processor=x86,
-              META-INF/native/osx/libleveldbjni.jnilib;osname=macosx;processor=x86-64,
-              META-INF/native/linux32/libleveldbjni.so;osname=Linux;processor=x86,
+              <!-- META-INF/native/windows32/leveldbjni.dll;osname=Win32;processor=x86,
+               META-INF/native/windows64/leveldbjni.dll;osname=Win32;processor=x86-64, -->
+               META-INF/native/osx/libleveldbjni.jnilib;osname=macosx;processor=x86,
+               META-INF/native/osx/libleveldbjni.jnilib;osname=macosx;processor=x86-64
+              <!-- META-INF/native/linux32/libleveldbjni.so;osname=Linux;processor=x86,
               META-INF/native/linux64/libleveldbjni.so;osname=Linux;processor=x86-64,
-<!--	      META-INF/native/sunos64/amd64/libleveldbjni.so;osname=SunOS;processor=x86-64,
-	          META-INF/native/sunos64/sparcv9/libleveldbjni.so;osname=SunOS;processor=sparcv9,
+	          META-INF/native/sunos64/amd64/libleveldbjni.so;osname=SunOS;processor=x86-64,
+              META-INF/native/sunos64/sparcv9/libleveldbjni.so;osname=SunOS;processor=sparcv9,
               META-INF/native/freebsd64/libleveldbjni.so;osname=FreeBSD;processor=x86-64,
-              META-INF/native/linux64/ppc64le/libleveldbjni.so;osname=Linux;processor=ppc64le,-->
-              META-INF/native/linux64/aarch64/libleveldbjni.so;osname=Linux;processor=aarch64
+              META-INF/native/linux64/ppc64le/libleveldbjni.so;osname=Linux;processor=ppc64le,
+              META-INF/native/linux64/aarch64/libleveldbjni.so;osname=Linux;processor=aarch64 -->
             </Bundle-NativeCode>
          </instructions>
         </configuration>

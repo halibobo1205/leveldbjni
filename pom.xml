@@ -51,15 +51,14 @@
     <forge-project-id>leveldbjni</forge-project-id>
     <forge-project-id-uc>LEVELDBJNI</forge-project-id-uc>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <hawtjni-version>1.11</hawtjni-version>
+    <hawtjni-version>1.15</hawtjni-version>
     <leveldb-api-version>0.6</leveldb-api-version>
   </properties>
   
   <modules>
     <module>leveldbjni</module>
-    <module>leveldbjni-all</module>
-    <module>leveldbjni-linux64</module>
     <module>leveldbjni-osx</module>
+    <module>leveldbjni-all</module>
   </modules>
   
   <url>http://${forge-project-id}.fusesource.org</url>
@@ -247,15 +246,15 @@
       <id>full</id>
       <modules>
         <module>leveldbjni-osx</module>
-        <module>leveldbjni-linux32</module>
-        <module>leveldbjni-linux64</module>
+       <!-- <module>leveldbjni-linux32</module>
+        <module>leveldbjni-linux64</module>-->
        <!-- <module>leveldbjni-freebsd64</module>-->
-        <module>leveldbjni-win32</module>
-        <module>leveldbjni-win64</module>
+       <!-- <module>leveldbjni-win32</module>
+        <module>leveldbjni-win64</module>-->
         <!--<module>leveldbjni-sunos64-amd64</module>
         <module>leveldbjni-sunos64-sparcv9</module>
         <module>leveldbjni-linux64-ppc64le</module>-->
-        <module>leveldbjni-linux64-aarch64</module>
+       <!-- <module>leveldbjni-linux64-aarch64</module>-->
         <module>leveldbjni-all</module>
       </modules>
     </profile>    
@@ -273,7 +272,7 @@
       </modules>
     </profile>
 
-    <profile>
+   <!-- <profile>
       <id>linux32</id>
       <modules>
         <module>leveldbjni-linux32</module>
@@ -285,7 +284,7 @@
       <modules>
         <module>leveldbjni-linux64</module>
       </modules>
-    </profile>
+    </profile>-->
 
     <!--<profile>
       <id>freebsd64</id>
@@ -294,7 +293,7 @@
       </modules>
     </profile>-->
 
-    <profile>
+    <!--<profile>
       <id>win32</id>
       <properties>
         <skipAutogen>true</skipAutogen>
@@ -302,9 +301,9 @@
       <modules>
         <module>leveldbjni-win32</module>
       </modules>
-    </profile>
+    </profile>-->
 
-    <profile>
+   <!-- <profile>
       <id>win64</id>
       <properties>
         <skipAutogen>true</skipAutogen>
@@ -312,7 +311,7 @@
       <modules>
         <module>leveldbjni-win64</module>
       </modules>
-    </profile>
+    </profile>-->
 <!--
     <profile>
       <id>sunos64-amd64</id>
@@ -334,12 +333,12 @@
         <module>leveldbjni-linux64-ppc64le</module>
       </modules>
     </profile>-->
-    <profile>
+   <!-- <profile>
       <id>linux64-aarch64</id>
       <modules>
         <module>leveldbjni-linux64-aarch64</module>
       </modules>
-    </profile>
+    </profile>-->
 
 
   </profiles>
