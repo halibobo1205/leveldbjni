@@ -36,12 +36,12 @@
   <parent>
     <groupId>org.fusesource.leveldbjni</groupId>
     <artifactId>leveldbjni-project</artifactId>
-    <version>99-master-SNAPSHOT</version>
+    <version>1.23</version>
   </parent>
 
   <groupId>org.fusesource.leveldbjni</groupId>
   <artifactId>leveldbjni-osx</artifactId>
-  <version>99-master-SNAPSHOT</version>
+  <version>1.23</version>
   
   <name>${project.artifactId}</name>
   <description>The leveldbjni OS X universal native libraries</description>
@@ -50,13 +50,13 @@
     <dependency>
       <groupId>org.fusesource.leveldbjni</groupId>
       <artifactId>leveldbjni</artifactId>
-      <version>99-master-SNAPSHOT</version>
+      <version>1.23</version>
     </dependency>
 
     <dependency>
       <groupId>org.fusesource.leveldbjni</groupId>
       <artifactId>leveldbjni</artifactId>
-      <version>99-master-SNAPSHOT</version>
+      <version>1.23</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
@@ -98,9 +98,10 @@
           </nativeSrcDependency>
           <platform>osx</platform>
           <configureArgs>
+            <arg>--with-jni-jdk=${env.JAVA_HOME}</arg>
             <arg>--with-leveldb=${env.LEVELDB_HOME}</arg>
             <arg>--with-snappy=${env.SNAPPY_HOME}</arg>
-            <arg>--with-universal</arg>
+            <!--<arg>&#45;&#45;with-universal</arg>-->
           </configureArgs>
         </configuration>
       </plugin>

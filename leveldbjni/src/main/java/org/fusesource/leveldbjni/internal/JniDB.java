@@ -216,16 +216,18 @@ public class JniDB implements DB {
 //  having to callback into java.
 //
     public void suspendCompactions() throws InterruptedException {
-        if( db==null ) {
+        /*if( db==null ) {
             throw new DBException("Closed");
         }
-        db.suspendCompactions();
+        db.suspendCompactions();*/
+        throw new DBException("Not Implemented");
     }
     public void resumeCompactions() {
-        if( db==null ) {
+        /*if( db==null ) {
             throw new DBException("Closed");
         }
-        db.resumeCompactions();
+        db.resumeCompactions();*/
+        throw new DBException("Not Implemented");
     }
 
 //    private static class Suspension {

@@ -41,7 +41,7 @@
 
   <groupId>org.fusesource.leveldbjni</groupId>
   <artifactId>leveldbjni-project</artifactId>
-  <version>99-master-SNAPSHOT</version>
+  <version>1.23</version>
   <packaging>pom</packaging>
   
   <name>${project.artifactId}</name>
@@ -244,7 +244,7 @@
       <id>full</id>
       <modules>
         <module>leveldbjni-osx</module>
-        <module>leveldbjni-linux32</module>
+        <!--<module>leveldbjni-linux32</module>
         <module>leveldbjni-linux64</module>
         <module>leveldbjni-freebsd64</module>
         <module>leveldbjni-win32</module>
@@ -252,7 +252,7 @@
         <module>leveldbjni-sunos64-amd64</module>
         <module>leveldbjni-sunos64-sparcv9</module>
         <module>leveldbjni-linux64-ppc64le</module>
-        <module>leveldbjni-linux64-aarch64</module>
+        <module>leveldbjni-linux64-aarch64</module>-->
         <module>leveldbjni-all</module>
       </modules>
     </profile>    
@@ -284,12 +284,12 @@
       </modules>
     </profile>
 
-    <profile>
+   <!-- <profile>
       <id>freebsd64</id>
       <modules>
         <module>leveldbjni-freebsd64</module>
       </modules>
-    </profile>
+    </profile>-->
 
     <profile>
       <id>win32</id>
@@ -311,7 +311,7 @@
       </modules>
     </profile>
 
-    <profile>
+<!--    <profile>
       <id>sunos64-amd64</id>
       <modules>
         <module>leveldbjni-sunos64-amd64</module>
@@ -336,7 +336,7 @@
       <modules>
         <module>leveldbjni-linux64-aarch64</module>
       </modules>
-    </profile>
+    </profile>-->
 
 
   </profiles>

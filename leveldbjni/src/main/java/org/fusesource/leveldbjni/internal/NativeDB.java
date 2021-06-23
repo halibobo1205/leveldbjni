@@ -163,11 +163,11 @@ public class NativeDB extends NativeObject {
                 @JniArg(flags={NO_OUT}) NativeSlice end
                 );
 
-        @JniMethod(flags={CPP_METHOD})
+       /* @JniMethod(flags={CPP_METHOD})
         static final native void SuspendCompactions(long self);
 
         @JniMethod(flags={CPP_METHOD})
-        static final native void ResumeCompactions(long self);
+        static final native void ResumeCompactions(long self);*/
     }
 
     public void delete() {
@@ -225,13 +225,13 @@ public class NativeDB extends NativeObject {
         return new NativeDB(rc[0]);
     }
 
-    public void suspendCompactions() {
+    /*public void suspendCompactions() {
         DBJNI.SuspendCompactions(self);
     }
 
     public void resumeCompactions() {
         DBJNI.ResumeCompactions(self);
-    }
+    }*/
 
     public void put(NativeWriteOptions options, byte[] key, byte[] value) throws DBException {
         checkArgNotNull(options, "options");

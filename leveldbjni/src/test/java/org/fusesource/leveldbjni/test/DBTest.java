@@ -417,7 +417,7 @@ public class DBTest extends TestCase {
         db.close();
     }
 
-    @Test
+    /*@Test
     public void testSuspendAndResumeCompactions() throws Exception {
         Options options = new Options().createIfMissing(true);
         File path = getTestDirectory(getName());
@@ -425,7 +425,7 @@ public class DBTest extends TestCase {
         db.suspendCompactions();
         db.resumeCompactions();
         db.close();
-    }
+    }*/
 
     public void assertEquals(byte[] arg1, byte[] arg2) {
         assertTrue(Arrays.equals(arg1, arg2));
