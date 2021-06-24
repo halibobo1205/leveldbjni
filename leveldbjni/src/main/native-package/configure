@@ -15290,7 +15290,11 @@ LDFLAGS="$LDFLAGS $JNI_EXTRA_LDFLAGS -release 1.23"
 ## -----------------------------------------------------
 ## Generate the files
 ## -----------------------------------------------------
-am__api_version='1.14'
+am__api_version=`automake --version | head -n1 | awk '{print$4}'`
+if test -z "${am__api_version}"; then
+    am__api_version='1.14'
+fi
+
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether build environment is sane" >&5
 $as_echo_n "checking whether build environment is sane... " >&6; }
