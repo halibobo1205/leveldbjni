@@ -88,6 +88,7 @@
             <type>zip</type>
           </nativeSrcDependency>
           <configureArgs>
+            <arg>CXXFLAGS=-std=c++11 -fno-rtti -fno-exceptions</arg>
             <arg>--with-leveldb=${env.LEVELDB_HOME}</arg>
             <arg>--with-snappy=${env.SNAPPY_HOME}</arg>
           </configureArgs>
