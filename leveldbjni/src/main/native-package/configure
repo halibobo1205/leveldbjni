@@ -15290,7 +15290,7 @@ LDFLAGS="$LDFLAGS $JNI_EXTRA_LDFLAGS -release 1.23"
 ## -----------------------------------------------------
 ## Generate the files
 ## -----------------------------------------------------
-am__api_version=`automake --version | head -n1 | awk '{print$4}'`
+am__api_version=`automake --version | head -n1 | awk '{print$4}' | awk -F'\.' '{print $1"."$2}'`
 if test -z "${am__api_version}"; then
     am__api_version='1.14'
 fi

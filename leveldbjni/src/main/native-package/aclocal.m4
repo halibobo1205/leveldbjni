@@ -33,7 +33,7 @@ To do so, use the procedure documented by the package, typically 'autoreconf'.])
 # (This private macro should not be called outside this file.)
 AC_DEFUN([AM_AUTOMAKE_VERSION],
 [
-am__api_version=`automake --version | head -n1 | awk '{print$4}'`
+am__api_version=`automake --version | head -n1 | awk '{print$4}' | awk -F'\.' '{print $1"."$2}'`
 if test -z "${am__api_version}"; then
     am__api_version='1.14'
 fi
