@@ -397,6 +397,7 @@ all: all-am
 am--refresh: Makefile
 	@:
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
+    $(am__cd) $(srcdir) && automake --add-missing;
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
