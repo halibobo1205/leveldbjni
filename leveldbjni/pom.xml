@@ -75,6 +75,18 @@
       </resource>
     </resources>
     <plugins>
+      <!--https://maven.apache.org/plugins/maven-resources-plugin/examples/binaries-filtering.html-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration>
+          <nonFilteredFileExtensions>
+            <nonFilteredFileExtension>so</nonFilteredFileExtension>
+            <nonFilteredFileExtension>dylib</nonFilteredFileExtension>
+          </nonFilteredFileExtensions>
+        </configuration>
+      </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
