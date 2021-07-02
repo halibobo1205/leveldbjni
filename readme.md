@@ -295,8 +295,8 @@ following argument to your maven build:
     git checkout leveldbjni/v1.23
     git submodule update --init
     mkdir build
-    export LIBRARY_PATH='[/tmp]/usr/local/[lib|lib64]'
-    export CPLUS_INCLUDE_PATH='[/tmp]/usr/local/include'
+    export LIBRARY_PATH=[/tmp]/usr/local/[lib|lib64]
+    export CPLUS_INCLUDE_PATH=[/tmp]/usr/local/include
     cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
     make [DESTDIR=/tmp] install
 ### 3.build leveldbjni

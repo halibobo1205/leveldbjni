@@ -10,7 +10,7 @@ public class NativeUtils {
      * The minimum length a prefix for a file has to have according to {@link File#createTempFile(String, String)}}.
      */
     private static final int MIN_PREFIX_LENGTH = 3;
-    public static final String NATIVE_FOLDER_PATH_PREFIX = "nativeutils";
+    public static final String NATIVE_FOLDER_PATH_PREFIX = "native-utils.";
 
     /**
      * Temporary directory which will contain the DLLs.
@@ -75,6 +75,7 @@ public class NativeUtils {
 		    // 加载临时文件夹中的动态库
         try {
             System.load(temp.getAbsolutePath());
+            System.out.println("******** load [" + temp.getAbsolutePath() + "] success ********" );
         } finally {
         	// 设置在JVM结束时删除临时文件
         	temp.deleteOnExit();
@@ -82,7 +83,7 @@ public class NativeUtils {
     }
 
     private static File createTempDirectory(String prefix) throws IOException {
-        String tempDir = "/tmp";
+        String tempDir = System.getProperty("java.io.tmpdir");
         File generatedDir = new File(tempDir, prefix + System.nanoTime());
         
         if (!generatedDir.mkdir())
