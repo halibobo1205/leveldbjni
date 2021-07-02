@@ -39,7 +39,7 @@
     <version>1.23</version>
   </parent>
 
-  <groupId>org.tron.leveldbjni</groupId>
+  <groupId>org.fusesource.leveldbjni</groupId>
   <artifactId>leveldbjni-osx</artifactId>
   <version>1.23</version>
   
@@ -107,10 +107,5 @@
       </plugin>
     </plugins>
   </build>
-  <repositories>
-    <repository>
-      <id>jitpack.io</id>
-      <url>https://jitpack.io</url>
-    </repository>
-  </repositories>
+
 </project>
