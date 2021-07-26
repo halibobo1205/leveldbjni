@@ -87,7 +87,7 @@ public class NativeOptions {
     @JniField(flags={FIELD_SKIP})
     private NativeCache cache;
 
-    @JniField(cast="leveldb::FilterPolicy*")
+    @JniField(cast="const leveldb::FilterPolicy*")
     private long filter_policy = 0;
     @JniField(flags={FIELD_SKIP})
     private NativeFilter filter;
