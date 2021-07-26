@@ -135,7 +135,7 @@ public class JniDBFactory implements DBFactory {
             }
 
             if(value.bitsPerKey() > 0 ) {
-                filter = new NativeFilter((int)value.bitsPerKey());
+                filter = new NativeFilter(value.bitsPerKey());
                 options.filter(filter);
             }
 
