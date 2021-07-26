@@ -87,6 +87,11 @@ public class NativeOptions {
     @JniField(flags={FIELD_SKIP})
     private NativeCache cache;
 
+    @JniField(cast="leveldb::FilterPolicy*")
+    private long filter_policy = 0;
+    @JniField(flags={FIELD_SKIP})
+    private NativeFilter filter;
+
     @JniField(cast="leveldb::CompressionType")
     private int compression = NativeCompressionType.kSnappyCompression.value;
 
@@ -201,6 +206,20 @@ public class NativeOptions {
             this.block_cache = cache.pointer();
         } else {
             this.block_cache = 0;
+        }
+        return this;
+    }
+
+    public NativeFilter filter() {
+        return filter;
+    }
+
+    public NativeOptions filter(NativeFilter filter) {
+        this.filter = filter;
+        if( filter!=null ) {
+            this.filter_policy = filter.pointer();
+        } else {
+            this.filter_policy = 0;
         }
         return this;
     }

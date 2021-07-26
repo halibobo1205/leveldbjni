@@ -58,7 +58,7 @@
       <version>${hawtjni-version}</version>
     </dependency>
     <dependency>
-      <groupId>org.iq80.leveldb</groupId>
+      <groupId>com.github.halibobo1205.leveldb-java</groupId>
       <artifactId>leveldb-api</artifactId>
       <version>${leveldb-api-version}</version>
     </dependency>

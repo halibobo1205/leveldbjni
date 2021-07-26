@@ -44,6 +44,7 @@ import java.util.*;
 
 import static org.fusesource.leveldbjni.JniDBFactory.asString;
 import static org.fusesource.leveldbjni.JniDBFactory.bytes;
+import static org.fusesource.leveldbjni.JniDBFactory.factory;
 
 /**
  * A Unit test for the DB class implementation.
@@ -51,7 +52,6 @@ import static org.fusesource.leveldbjni.JniDBFactory.bytes;
  * @author <a href="http://hiramchirino.com">Hiram Chirino</a>
  */
 public class DBTest extends TestCase {
-    DBFactory factory = JniDBFactory.factory;
 
     File getTestDirectory(String name) throws IOException {
         File rc = new File(new File("test-data"), name);
@@ -63,7 +63,7 @@ public class DBTest extends TestCase {
     @Test
     public void testOpen() throws IOException {
 
-        Options options = new Options().createIfMissing(true);
+        Options options = new Options().createIfMissing(true).bitsPerKey(10);
 
         File path = getTestDirectory(getName());
         DB db = factory.open(path, options);

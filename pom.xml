@@ -52,7 +52,7 @@
     <forge-project-id-uc>LEVELDBJNI</forge-project-id-uc>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <hawtjni-version>1.11</hawtjni-version>
-    <leveldb-api-version>0.12</leveldb-api-version>
+    <leveldb-api-version>v0.12.7</leveldb-api-version>
   </properties>
   
   <modules>
@@ -341,4 +341,10 @@
 
 
   </profiles>
+  <repositories>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
 </project>

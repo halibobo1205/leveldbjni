@@ -77,6 +77,7 @@
 #include "leveldb/comparator.h"
 #include "leveldb/env.h"
 #include "leveldb/slice.h"
+#include "leveldb/filter_policy.h"
 
 struct JNIComparator : public leveldb::Comparator {
   jobject target;

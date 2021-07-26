@@ -31,12 +31,26 @@
  */
 package org.fusesource.leveldbjni;
 
-import org.fusesource.leveldbjni.internal.*;
-import org.iq80.leveldb.*;
-
-import java.io.*;
-import java.net.URL;
-import java.util.concurrent.Callable;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import org.fusesource.leveldbjni.internal.JniDB;
+import org.fusesource.leveldbjni.internal.NativeBuffer;
+import org.fusesource.leveldbjni.internal.NativeCache;
+import org.fusesource.leveldbjni.internal.NativeComparator;
+import org.fusesource.leveldbjni.internal.NativeCompressionType;
+import org.fusesource.leveldbjni.internal.NativeDB;
+import org.fusesource.leveldbjni.internal.NativeFilter;
+import org.fusesource.leveldbjni.internal.NativeLogger;
+import org.fusesource.leveldbjni.internal.NativeOptions;
+import org.iq80.leveldb.DB;
+import org.iq80.leveldb.DBComparator;
+import org.iq80.leveldb.DBFactory;
+import org.iq80.leveldb.Logger;
+import org.iq80.leveldb.Options;
 
 /**
  * @author <a href="http://hiramchirino.com">Hiram Chirino</a>
@@ -89,6 +103,7 @@ public class JniDBFactory implements DBFactory {
     static private class OptionsResourceHolder {
 
         NativeCache cache = null;
+        NativeFilter filter = null ;
         NativeComparator comparator=null;
         NativeLogger logger=null;
         NativeOptions options;
@@ -117,6 +132,11 @@ public class JniDBFactory implements DBFactory {
             if(value.cacheSize()>0 ) {
                 cache = new NativeCache(value.cacheSize());
                 options.cache(cache);
+            }
+
+            if(value.bitsPerKey() > 0 ) {
+                filter = new NativeFilter((int)value.bitsPerKey());
+                options.filter(filter);
             }
 
             final DBComparator userComparator = value.comparator();
@@ -150,6 +170,9 @@ public class JniDBFactory implements DBFactory {
         public void close() {
             if(cache!=null) {
                 cache.delete();
+            }
+            if(filter!=null) {
+                filter.delete();
             }
             if(comparator!=null){
                 comparator.delete();
