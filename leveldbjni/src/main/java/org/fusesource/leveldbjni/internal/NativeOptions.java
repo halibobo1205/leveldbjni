@@ -6,7 +6,7 @@
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
  * met:
- * 
+ *
  *    * Redistributions of source code must retain the above copyright
  * notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above
@@ -16,7 +16,7 @@
  *    * Neither the name of FuseSource Corp. nor the names of its
  * contributors may be used to endorse or promote products derived from
  * this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -31,15 +31,15 @@
  */
 package org.fusesource.leveldbjni.internal;
 
-import org.fusesource.hawtjni.runtime.JniClass;
-import org.fusesource.hawtjni.runtime.JniField;
-import org.fusesource.hawtjni.runtime.JniMethod;
-
 import static org.fusesource.hawtjni.runtime.ClassFlag.CPP;
 import static org.fusesource.hawtjni.runtime.ClassFlag.STRUCT;
 import static org.fusesource.hawtjni.runtime.FieldFlag.CONSTANT;
 import static org.fusesource.hawtjni.runtime.FieldFlag.FIELD_SKIP;
 import static org.fusesource.hawtjni.runtime.MethodFlag.CONSTANT_INITIALIZER;
+
+import org.fusesource.hawtjni.runtime.JniClass;
+import org.fusesource.hawtjni.runtime.JniField;
+import org.fusesource.hawtjni.runtime.JniMethod;
 
 /**
  * Provides a java interface to the C++ leveldb::Options class.
@@ -63,12 +63,15 @@ public class NativeOptions {
     private boolean create_if_missing = false;
     private boolean error_if_exists = false;
     private boolean paranoid_checks = false;
+    private boolean reuse_logs = false;
     @JniField(cast="size_t")
     private long write_buffer_size = 4 << 20;
     @JniField(cast="size_t")
-    private long block_size = 4086;
+    private long block_size = 4 * 1024;
     private int max_open_files = 1000;
     private int block_restart_interval = 16;
+    @JniField(cast="size_t")
+    private long max_file_size = 2 * 1024 * 1024;
 
     @JniField(flags={FIELD_SKIP})
     private NativeComparator comparatorObject = NativeComparator.BYTEWISE_COMPARATOR;
@@ -119,12 +122,28 @@ public class NativeOptions {
         return paranoid_checks;
     }
 
+    public NativeOptions reuseLogs(boolean value) {
+        this.reuse_logs = value;
+        return this;
+    }
+    public boolean reuseLogs() {
+        return reuse_logs;
+    }
+
     public NativeOptions writeBufferSize(long value) {
         this.write_buffer_size = value;
         return this;
     }
     public long writeBufferSize() {
         return write_buffer_size;
+    }
+
+    public NativeOptions maxFileSize(long value) {
+        this.max_file_size = value;
+        return this;
+    }
+    public long maxFileSize() {
+        return max_file_size;
     }
 
     public NativeOptions maxOpenFiles(int value) {

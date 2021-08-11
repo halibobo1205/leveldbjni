@@ -31,20 +31,37 @@
  */
 package org.fusesource.leveldbjni.test;
 
-import junit.framework.TestCase;
-import org.fusesource.leveldbjni.JniDBFactory;
-import org.fusesource.leveldbjni.internal.JniDB;
-import org.iq80.leveldb.*;
-import org.junit.Test;
+import static org.fusesource.leveldbjni.JniDBFactory.asString;
+import static org.fusesource.leveldbjni.JniDBFactory.bytes;
+import static org.fusesource.leveldbjni.JniDBFactory.factory;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.*;
-
-import static org.fusesource.leveldbjni.JniDBFactory.asString;
-import static org.fusesource.leveldbjni.JniDBFactory.bytes;
-import static org.fusesource.leveldbjni.JniDBFactory.factory;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Random;
+import java.util.UUID;
+import junit.framework.TestCase;
+import org.fusesource.leveldbjni.JniDBFactory;
+import org.fusesource.leveldbjni.internal.JniDB;
+import org.iq80.leveldb.DB;
+import org.iq80.leveldb.DBComparator;
+import org.iq80.leveldb.DBException;
+import org.iq80.leveldb.DBIterator;
+import org.iq80.leveldb.Logger;
+import org.iq80.leveldb.Options;
+import org.iq80.leveldb.Range;
+import org.iq80.leveldb.ReadOptions;
+import org.iq80.leveldb.WriteBatch;
+import org.iq80.leveldb.WriteOptions;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * A Unit test for the DB class implementation.
@@ -63,7 +80,7 @@ public class DBTest extends TestCase {
     @Test
     public void testOpen() throws IOException {
 
-        Options options = new Options().createIfMissing(true).bitsPerKey(10);
+        Options options = new Options().createIfMissing(true);
 
         File path = getTestDirectory(getName());
         DB db = factory.open(path, options);
@@ -112,6 +129,33 @@ public class DBTest extends TestCase {
         db.delete(bytes("New York"), wo);
 
         db.close();
+    }
+
+    @Test
+    public void testBloomFilter() throws IOException, DBException {
+
+        Options options1 = new Options().createIfMissing(true).bitsPerKey(10);
+        Options options2 = new Options().createIfMissing(true);
+        Options options3 = new Options().createIfMissing(true).bitsPerKey(10);
+        Options options4 = new Options().createIfMissing(true);
+
+        File path1 = getTestDirectory("testBloomFilter1");
+        File path2 = getTestDirectory("testBloomFilter2");
+        File path3 = getTestDirectory("testBloomFilter3");
+        File path4 = getTestDirectory("testBloomFilter4");
+
+        try (DB db1 = factory.open(path1, options1);
+             DB db2 = factory.open(path2, options2);
+             DB db3 = factory.open(path3, options3);
+             DB db4 = factory.open(path4, options4)){
+            for (int i = 0; i <50000 ; i++) {
+                String v = UUID.randomUUID().toString();
+                db1.put(bytes(v), bytes(v));
+                db2.put(bytes(v), bytes(v));
+                db3.put(bytes(v), bytes(v));
+                db4.put(bytes(v), bytes(v));
+            }
+        }
     }
 
     @Test
@@ -256,7 +300,6 @@ public class DBTest extends TestCase {
         String memory_usage = db.getProperty("leveldb.approximate-memory-usage");
         assertNotNull(memory_usage);
         assertTrue(Integer.parseInt(memory_usage) > 0);
-
         db.close();
     }
 
@@ -597,6 +640,8 @@ public class DBTest extends TestCase {
         final byte[] key_001 = newKey((byte) 1);
         final byte[] key_025 = newKey((byte) 25);
         final byte[] key_050 = newKey((byte) 50);
+        final byte[] key_055 = newKey((byte) 55);
+        final byte[] key_065 = newKey((byte) 65);
         final byte[] key_075 = newKey((byte) 75);
         final byte[] key_100 = newKey((byte) 100);
         final byte[] value_025 = bytes("25");
@@ -622,12 +667,35 @@ public class DBTest extends TestCase {
         //
         it.seek(key_001);
         assertTrue(it.hasNext());
+        assertEquals(key_025, it.key());
+        assertEquals(value_025, it.value());
+
+
         it.seek(key_025);
         assertTrue(it.hasNext());
+        assertEquals(key_025, it.key());
+        assertEquals(value_025, it.value());
+
         it.seek(key_050);
         assertTrue(it.hasNext());
+        assertEquals(key_050, it.key());
+        assertEquals(value_050, it.value());
+
+        it.seek(key_055);
+        assertTrue(it.hasNext());
+        assertEquals(key_075, it.key());
+        assertEquals(value_075, it.value());
+
+        it.seek(key_065);
+        assertTrue(it.hasNext());
+        assertEquals(key_075, it.key());
+        assertEquals(value_075, it.value());
+
         it.seek(key_075);
         assertTrue(it.hasNext());
+        assertEquals(key_075, it.key());
+        assertEquals(value_075, it.value());
+
         it.seek(key_100);
         assertFalse(it.hasNext());
 
@@ -648,6 +716,16 @@ public class DBTest extends TestCase {
         entry = it.next();
         assertEquals(key_050, entry.getKey());
         assertEquals(value_050, entry.getValue());
+
+        it.seek(key_055);
+        entry = it.next();
+        assertEquals(key_075, entry.getKey());
+        assertEquals(value_075, entry.getValue());
+
+        it.seek(key_065);
+        entry = it.next();
+        assertEquals(key_075, entry.getKey());
+        assertEquals(value_075, entry.getValue());
 
         it.seek(key_075);
         entry = it.next();
@@ -679,6 +757,16 @@ public class DBTest extends TestCase {
         assertEquals(key_050, entry.getKey());
         assertEquals(value_050, entry.getValue());
 
+        it.seek(key_055);
+        entry = it.peekNext();
+        assertEquals(key_075, entry.getKey());
+        assertEquals(value_075, entry.getValue());
+
+        it.seek(key_065);
+        entry = it.peekNext();
+        assertEquals(key_075, entry.getKey());
+        assertEquals(value_075, entry.getValue());
+
         it.seek(key_075);
         entry = it.peekNext();
         assertEquals(key_075, entry.getKey());
@@ -695,10 +783,12 @@ public class DBTest extends TestCase {
         // check hasPrev
         //
         it.seek(key_001);
-        assertFalse(it.hasPrev());
+        assertTrue(it.hasPrev());
         it.seek(key_025);
-        assertFalse(it.hasPrev());
+        assertTrue(it.hasPrev());
         it.seek(key_050);
+        assertTrue(it.hasPrev());
+        it.seek(key_055);
         assertTrue(it.hasPrev());
         it.seek(key_075);
         assertTrue(it.hasPrev());
@@ -708,29 +798,41 @@ public class DBTest extends TestCase {
         //
         // check prev:
         //
-        it.seek(key_001);
+        it.seekToFirst();
         try {
+            it.prev(); // return head point to null
+            assertFalse(it.Valid());
             it.prev();
             fail("NoSuchElementException is expected");
         } catch (NoSuchElementException ex) {
         }
 
         it.seek(key_025);
-        try {
-            it.prev();
-            fail("NoSuchElementException is expected");
-        } catch (NoSuchElementException ex) {
-        }
-
-        it.seek(key_050);
         entry = it.prev();
         assertEquals(key_025, entry.getKey());
         assertEquals(value_025, entry.getValue());
 
+        it.seek(key_050);
+        it.prev();
+        assertEquals(key_025, it.key());
+        assertEquals(value_025, it.value());
+
+        it.seek(key_055);
+        it.prev();
+        assertEquals(key_050, it.key());
+        assertEquals(value_050, it.value());
+
+        it.seek(key_065);
+        entry = it.prev();
+        assertEquals(key_075, entry.getKey());
+        assertEquals(value_075, entry.getValue());
+
         it.seek(key_075);
         entry = it.prev();
-        assertEquals(key_050, entry.getKey());
-        assertEquals(value_050, entry.getValue());
+        assertEquals(key_050, it.key());
+        assertEquals(value_050, it.value());
+        assertEquals(key_075, entry.getKey());
+        assertEquals(value_075, entry.getValue());
 
         it.seek(key_100);
         try {
@@ -743,32 +845,39 @@ public class DBTest extends TestCase {
         // check peekPrev:
         //
         it.seek(key_001);
-        try {
-            it.peekPrev();
-            fail("NoSuchElementException is expected");
-        } catch (NoSuchElementException ex) {
-        }
-
-        it.seek(key_025);
-        try {
-            it.peekPrev();
-            fail("NoSuchElementException is expected");
-        } catch (NoSuchElementException ex) {
-        }
-
-        it.seek(key_050);
         entry = it.peekPrev();
         assertEquals(key_025, entry.getKey());
         assertEquals(value_025, entry.getValue());
 
-        it.seek(key_075);
+        it.seek(key_025);
+        entry = it.peekPrev();
+        assertEquals(key_025, entry.getKey());
+        assertEquals(value_025, entry.getValue());
+
+
+        it.seek(key_050);
         entry = it.peekPrev();
         assertEquals(key_050, entry.getKey());
         assertEquals(value_050, entry.getValue());
 
+        it.seek(key_055);
+        entry = it.peekPrev();
+        assertEquals(key_075, entry.getKey());
+        assertEquals(value_075, entry.getValue());
+
+        it.seek(key_065);
+        entry = it.peekPrev();
+        assertEquals(key_075, entry.getKey());
+        assertEquals(value_075, entry.getValue());
+
+        it.seek(key_075);
+        entry = it.peekPrev();
+        assertEquals(key_075, entry.getKey());
+        assertEquals(value_075, entry.getValue());
+
         it.seek(key_100);
         try {
-            it.peekPrev(); // TODO: Expected result?
+            it.peekPrev();
             fail("NoSuchElementException is expected");
         } catch (NoSuchElementException ex) {
         }
@@ -829,20 +938,101 @@ public class DBTest extends TestCase {
         //
         it.seekToLast();
         entry = it.prev();
-        assertEquals(key_050, entry.getKey());
-        assertEquals(value_050, entry.getValue());
+        assertEquals(key_075, entry.getKey());
+        assertEquals(value_075, entry.getValue());
+        assertEquals(key_050, it.key());
+        assertEquals(value_050, it.value());
 
         entry = it.prev();
-        assertEquals(key_025, entry.getKey());
-        assertEquals(value_025, entry.getValue());
+        assertEquals(key_050, entry.getKey());
+        assertEquals(value_050, entry.getValue());
+        assertEquals(key_025, it.key());
+        assertEquals(value_025, it.value());
 
         try {
+            it.prev(); // return head ,point to null
             it.prev();
             fail("NoSuchElementException is expected");
         } catch (NoSuchElementException ex) {
         }
 
         it.close();
+        db.close();
+    }
+
+    private static byte[] toByteArray(int value) {
+        return new byte[]{(byte)(value >> 24), (byte)(value >> 16), (byte)(value >> 8), (byte)value};
+    }
+    public static int fromByteArray(byte[] bytes) {
+        return bytes[0] << 24 | (bytes[1] & 255) << 16 | (bytes[2] & 255) << 8 | bytes[3] & 255;
+    }
+    @Test
+    public  void testIteratorNegative2() throws IOException {
+
+        File path = getTestDirectory(getName());
+        Options options = new Options();
+        DB database = factory.open(path, options);
+
+        for (int i = 0; i < 10; i++) {
+            byte[] bytes = toByteArray(i);
+            database.put(bytes, bytes);
+        }
+        ReadOptions readOptions = new ReadOptions().fillCache(false);
+
+        DBIterator iterable = database.iterator(readOptions);
+        DBIterator iterable2 = database.iterator(readOptions);
+        DBIterator iterable3 = database.iterator(readOptions);
+        DBIterator iterable4 = database.iterator(readOptions);
+        iterable.seekToFirst();
+        while (iterable.hasNext()) {
+            System.out.println("iterable:" + fromByteArray(iterable.next().getKey()));
+        }
+        System.out.println();
+
+        for (iterable2.seekToFirst(); iterable2.hasNext(); iterable2.next()) {
+            System.out.println("iterable2:" + fromByteArray(iterable2.key()));
+
+        }
+        System.out.println();
+
+        iterable3.seekToLast();
+        while (iterable3.Valid()) {
+            System.out.println("iterable3:" + fromByteArray(iterable3.prev().getKey()));
+        }
+
+        System.out.println();
+        for (iterable4.seekToLast(); iterable4.Valid(); iterable4.prev()) {
+            byte[] key = iterable4.key();
+            System.out.println("iterable4:" + fromByteArray(key));
+
+        }
+        iterable.close();
+        iterable2.close();
+        iterable3.close();
+        iterable4.close();
+        database.close();
+    }
+    @Test
+    public void testReuseLogs() throws IOException {
+        Options options = new Options().createIfMissing(true).reuseLogs(true);
+        File path = getTestDirectory(getName());
+        DB db = factory.open(path, options);
+        db.put("halibobo".getBytes(StandardCharsets.UTF_8),"hello".getBytes(StandardCharsets.UTF_8));
+        db.close();
+        DB reopenDb = factory.open(path, options);
+        Assert.assertTrue(Arrays.equals("hello".getBytes(StandardCharsets.UTF_8),
+            reopenDb.get("halibobo".getBytes(StandardCharsets.UTF_8))));
+        reopenDb.close();
+    }
+    @Test
+    public void testMaxFileSize() throws IOException {
+        Options options = new Options().createIfMissing(true).maxFileSize(4 * 1024 * 1024);
+        File path = getTestDirectory(getName());
+        DB db = factory.open(path, options);
+        for (int i = 0; i < 1000000; i++) {
+            byte[] bytes = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
+            db.put(bytes, bytes);
+        }
         db.close();
     }
 }
