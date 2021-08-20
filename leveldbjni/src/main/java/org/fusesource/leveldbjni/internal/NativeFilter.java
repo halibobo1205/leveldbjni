@@ -46,7 +46,7 @@ import org.fusesource.hawtjni.runtime.JniMethod;
 public class NativeFilter extends NativeObject {
 
     @JniClass(name="leveldb::FilterPolicy", flags={CPP})
-    private static class FilterJNI {
+    private static class FilterPolicyJNI {
         static {
             NativeDB.LIBRARY.load();
         }
@@ -60,12 +60,12 @@ public class NativeFilter extends NativeObject {
     }
 
     public NativeFilter(int bitsPerKey) {
-        super(FilterJNI.NewBloomFilterPolicy(bitsPerKey));
+        super(FilterPolicyJNI.NewBloomFilterPolicy(bitsPerKey));
     }
 
     public void delete() {
         assertAllocated();
-        FilterJNI.delete(self);
+        FilterPolicyJNI.delete(self);
         self = 0;
     }
 
