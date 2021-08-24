@@ -102,7 +102,7 @@
 
       <plugin>
         <groupId>org.fusesource.hawtjni</groupId>
-        <artifactId>maven-hawtjni-plugin</artifactId>
+        <artifactId>hawtjni-maven-plugin</artifactId>
         <version>${hawtjni-version}</version>
         <executions>
           <execution>
@@ -213,7 +213,7 @@
                 <pluginExecution>
                   <pluginExecutionFilter>
                     <groupId>org.fusesource.hawtjni</groupId>
-                    <artifactId>maven-hawtjni-plugin</artifactId>
+                    <artifactId>hawtjni-maven-plugin</artifactId>
                     <versionRange>[1.11,)</versionRange>
                     <goals>
                       <goal>generate</goal>
