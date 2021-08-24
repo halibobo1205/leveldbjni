@@ -46,7 +46,11 @@
   
   <name>${project.artifactId}</name>
   <description>An uber jar which contains all the leveldbjni platform libraries and dependencies</description>
-      
+  <properties>
+    <felix-groupId>org.apache.felix</felix-groupId>
+    <felix-artifactId>maven-bundle-plugin</felix-artifactId>
+    <felix-version>2.3.7</felix-version>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.fusesource.leveldbjni</groupId>
@@ -54,45 +58,15 @@
       <version>1.23</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.fusesource.leveldbjni</groupId>
-      <artifactId>leveldbjni-osx</artifactId>
-      <version>1.23</version>
-      <scope>provided</scope>
-    </dependency>
-<!--    <dependency>
-      <groupId>org.fusesource.leveldbjni</groupId>
-      <artifactId>leveldbjni-linux32</artifactId>
-      <version>1.8</version>
-      <scope>provided</scope>
-    </dependency>  -->
-    <dependency>
-      <groupId>org.fusesource.leveldbjni</groupId>
-      <artifactId>leveldbjni-linux64</artifactId>
-      <version>1.23</version>
-      <scope>provided</scope>
-    </dependency>
-  <!--  <dependency>
-      <groupId>org.fusesource.leveldbjni</groupId>
-      <artifactId>leveldbjni-win32</artifactId>
-      <version>1.8</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.fusesource.leveldbjni</groupId>
-      <artifactId>leveldbjni-win64</artifactId>
-      <version>1.8</version>
-      <scope>provided</scope>
-    </dependency> -->
   </dependencies>
   <build>
      
     <plugins>
 
       <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <version>2.3.7</version>
+        <groupId>${felix-groupId}</groupId>
+        <artifactId>${felix-artifactId}</artifactId>
+        <version>${felix-version}</version>
         <extensions>true</extensions>
         <inherited>true</inherited>
         <configuration>
@@ -112,21 +86,12 @@
               *;groupId=org.fusesource.leveldbjni;inline=lib/*/*,
             </Embed-Dependency>
             <Embed-Transitive>true</Embed-Transitive>
-            <Bundle-NativeCode>
-              <!--META-INF/native/windows32/leveldbjni.dll;osname=Win32;processor=x86,
-              META-INF/native/windows64/leveldbjni.dll;osname=Win32;processor=x86-64,-->
-              META-INF/native/osx/libleveldbjni.jnilib;osname=macosx;processor=x86,
-              META-INF/native/osx/libleveldbjni.jnilib;osname=macosx;processor=x86-64,
-              META-INF/native/osx/libleveldbjni.jnilib;osname=macosx;processor=arm64,
-              <!--META-INF/native/linux32/libleveldbjni.so;osname=Linux;processor=x86, -->
-              META-INF/native/linux64/libleveldbjni.so;osname=Linux;processor=x86-64
-            </Bundle-NativeCode>
          </instructions>
         </configuration>
       </plugin>
     </plugins>
   </build>
-  
+
   <profiles>
     <profile>
       <id>release</id>
@@ -183,6 +148,200 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>osx</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>${felix-groupId}</groupId>
+            <artifactId>${felix-artifactId}</artifactId>
+            <version>${felix-version}</version>
+            <configuration>
+            <instructions>
+              <Bundle-NativeCode>
+                META-INF/native/osx/libleveldbjni.jnilib;osname=macosx;processor=x86,
+                META-INF/native/osx/libleveldbjni.jnilib;osname=macosx;processor=x86-64,
+                META-INF/native/osx/libleveldbjni.jnilib;osname=macosx;processor=arm64
+              </Bundle-NativeCode>
+            </instructions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.fusesource.leveldbjni</groupId>
+          <artifactId>leveldbjni-osx</artifactId>
+          <version>1.23</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>linux32</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>${felix-groupId}</groupId>
+            <artifactId>${felix-artifactId}</artifactId>
+            <version>${felix-version}</version>
+            <configuration>
+              <instructions>
+                <Bundle-NativeCode>
+                  META-INF/native/linux32/libleveldbjni.so;osname=Linux;processor=x86
+                </Bundle-NativeCode>
+              </instructions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.fusesource.leveldbjni</groupId>
+          <artifactId>leveldbjni-linux32</artifactId>
+          <version>1.23</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>linux64</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>${felix-groupId}</groupId>
+            <artifactId>${felix-artifactId}</artifactId>
+            <version>${felix-version}</version>
+            <configuration>
+              <instructions>
+                <Bundle-NativeCode>
+                  META-INF/native/linux64/libleveldbjni.so;osname=Linux;processor=x86-64
+                </Bundle-NativeCode>
+              </instructions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.fusesource.leveldbjni</groupId>
+          <artifactId>leveldbjni-linux64</artifactId>
+          <version>1.23</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>win32</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>${felix-groupId}</groupId>
+            <artifactId>${felix-artifactId}</artifactId>
+            <version>${felix-version}</version>
+            <configuration>
+              <instructions>
+                <Bundle-NativeCode>
+                  META-INF/native/windows32/leveldbjni.dll;osname=Win32;processor=x86
+                </Bundle-NativeCode>
+              </instructions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.fusesource.leveldbjni</groupId>
+          <artifactId>leveldbjni-win32</artifactId>
+          <version>1.23</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>win64</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>${felix-groupId}</groupId>
+            <artifactId>${felix-artifactId}</artifactId>
+            <version>${felix-version}</version>
+            <configuration>
+              <instructions>
+                <Bundle-NativeCode>
+                  META-INF/native/windows64/leveldbjni.dll;osname=Win32;processor=x86-64
+                </Bundle-NativeCode>
+              </instructions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.fusesource.leveldbjni</groupId>
+          <artifactId>leveldbjni-win64</artifactId>
+          <version>1.23</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>all</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>${felix-groupId}</groupId>
+            <artifactId>${felix-artifactId}</artifactId>
+            <version>${felix-version}</version>
+            <configuration>
+              <instructions>
+                <Bundle-NativeCode>
+                  META-INF/native/windows32/leveldbjni.dll;osname=Win32;processor=x86,
+                  META-INF/native/windows64/leveldbjni.dll;osname=Win32;processor=x86-64,
+                  META-INF/native/linux32/libleveldbjni.so;osname=Linux;processor=x86,
+                  META-INF/native/linux64/libleveldbjni.so;osname=Linux;processor=x86-64
+                  META-INF/native/osx/libleveldbjni.jnilib;osname=macosx;processor=x86,
+                  META-INF/native/osx/libleveldbjni.jnilib;osname=macosx;processor=x86-64,
+                  META-INF/native/osx/libleveldbjni.jnilib;osname=macosx;processor=arm64
+                </Bundle-NativeCode>
+              </instructions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.fusesource.leveldbjni</groupId>
+          <artifactId>leveldbjni-osx</artifactId>
+          <version>1.23</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.fusesource.leveldbjni</groupId>
+          <artifactId>leveldbjni-win32</artifactId>
+          <version>1.23</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.fusesource.leveldbjni</groupId>
+          <artifactId>leveldbjni-win64</artifactId>
+          <version>1.23</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.fusesource.leveldbjni</groupId>
+          <artifactId>leveldbjni-linux32</artifactId>
+          <version>1.23</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.fusesource.leveldbjni</groupId>
+          <artifactId>leveldbjni-linux64</artifactId>
+          <version>1.23</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
     </profile>
   </profiles>
   
