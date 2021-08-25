@@ -6,7 +6,7 @@
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
  * met:
- * 
+ *
  *    * Redistributions of source code must retain the above copyright
  * notice, this list of conditions and the following disclaimer.
  *    * Redistributions in binary form must reproduce the above
@@ -16,7 +16,7 @@
  *    * Neither the name of FuseSource Corp. nor the names of its
  * contributors may be used to endorse or promote products derived from
  * this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -29,6 +29,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package org.fusesource.leveldbjni.internal;
 
 import static org.fusesource.hawtjni.runtime.ClassFlag.CPP;
@@ -45,28 +46,31 @@ import org.fusesource.hawtjni.runtime.JniMethod;
  */
 public class NativeFilter extends NativeObject {
 
-    @JniClass(name="leveldb::FilterPolicy", flags={CPP})
-    private static class FilterPolicyJNI {
-        static {
-            NativeDB.LIBRARY.load();
-        }
+  public NativeFilter(int bitsPerKey) {
+    super(FilterPolicyJNI.NewBloomFilterPolicy(bitsPerKey));
+  }
 
-        @JniMethod(cast="const leveldb::FilterPolicy *", accessor="leveldb::NewBloomFilterPolicy")
-        public static final native long NewBloomFilterPolicy(
-                @JniArg(cast="int") int bits_per_key);
+  /**
+   * delete jni object.
+   */
+  public void delete() {
+    assertAllocated();
+    FilterPolicyJNI.delete(self);
+    self = 0;
+  }
 
-        @JniMethod(flags={CPP_DELETE})
-        public static final native void delete(long self);
+  @JniClass(name = "leveldb::FilterPolicy", flags = {CPP})
+  private static class FilterPolicyJNI {
+    static {
+      NativeDB.LIBRARY.load();
     }
 
-    public NativeFilter(int bitsPerKey) {
-        super(FilterPolicyJNI.NewBloomFilterPolicy(bitsPerKey));
-    }
+    @JniMethod(cast = "const leveldb::FilterPolicy *", accessor = "leveldb::NewBloomFilterPolicy")
+    public static final native long NewBloomFilterPolicy(
+        @JniArg(cast = "int") int bits_per_key);
 
-    public void delete() {
-        assertAllocated();
-        FilterPolicyJNI.delete(self);
-        self = 0;
-    }
+    @JniMethod(flags = {CPP_DELETE})
+    public static final native void delete(long self);
+  }
 
 }
