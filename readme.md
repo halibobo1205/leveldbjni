@@ -60,12 +60,6 @@ Opening and closing the database.
     Options options = new Options();
     options.createIfMissing(true);
     DB db = factory.open(new File("example"), options);
-    // if use new leveldb-1.23,require c++11,need at least libstdc++.so.6.0.22
-    // how to check 
-    // strings /usr/lib64/libstdc++.so.6 | grep GLIBCXX
-    // call manually
-    // LoadLibrary.load();
-    //
     try {
       // Use the db in here....
     } finally {
