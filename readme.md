@@ -7,6 +7,58 @@ LevelDB JNI gives you a Java interface to the
 which is a fast key-value storage library written at Google 
 that provides an ordered mapping from string keys to string values.. 
 
+
+#  Notice this repo important
+
+## this jni is based on leveldb 1.23 and snappy 1.8.
+
+## how to build
+    > note: The following examples work on mac, linux, other platforms are not verified yet.
+    
+### Prerequisites
+*  gcc-c++
+*  java(1.8+)，make sure the current session $JAVA_HOME is set.
+*  [cmake](https://cmake.org/download/)
+*  maven
+*  automake
+*  autoconf
+*  pkg-configls(linux maybe required)
+
+
+### 1. build snappy
+    git clone https://github.com/halibobor/snappy.git
+    cd snappy
+    git checkout leveldbjni/v1.1.8
+    git submodule update --init
+    mkdir build
+    cd build && cmake ../ && make
+    make DESTDIR=/tmp install
+### 2.build leveldb
+    git clone https://github.com/halibobor/leveldb.git
+    cd leveldb
+    git checkout leveldbjni/v1.23
+    git submodule update --init
+    mkdir build
+    export LIBRARY_PATH=/tmp/usr/local/lib OR export LIBRARY_PATH=/tmp/usr/local/lib64
+    export CPLUS_INCLUDE_PATH=/tmp/usr/local/include
+    cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
+    make DESTDIR=/tmp install
+### 3.build leveldbjni
+    git clone https://github.com/halibobor/leveldbjni.git
+    cd leveldbjni
+    export SNAPPY_HOME=/tmp/usr/local
+    export LEVELDB_HOME=/tmp/usr/local
+    mvn clean install -P ${platform}
+
+Replace ${platform} with one of the following platform identifiers (depending on the platform your building on):
+
+* osx
+* linux32
+* linux64
+* win32
+* win64
+* freebsd64
+
 # Getting the JAR
 
 Just add the following jar to your java project:
@@ -267,35 +319,4 @@ following argument to your maven build:
 * `leveldbjni/target/leveldbjni-${version}.jar` : The java class file to the library.
 * `leveldbjni/target/leveldbjni-${version}-native-src.zip` : A GNU style source project which you can use to build the native library on other systems.
 * `leveldbjni-${platform}/target/leveldbjni-${platform}-${version}.jar` : A jar file containing the built native library using your currently platform.
-    
-# Notice this repo important
-
-## this jni for leveldb 1.23,and snappy 1.8, for now, just work for mac64 and linux64
-
-## how to build
-
-### Prerequisites
-* gcc-c++ automake autoconf pkg-configls
-* [cmake](https://cmake.org/download/)
-### 1. build snappy
-    git clone https://github.com/halibobo1205/snappy.git
-    git checkout leveldbjni/v1.1.8
-    git submodule update --init
-    mkdir build
-    cd build && cmake ../ && make
-    make [DESTDIR=/tmp] install
-### 2.build leveldb
-    git clone https://github.com/halibobo1205/leveldb.git
-    git checkout leveldbjni/v1.23
-    git submodule update --init
-    mkdir build
-    export LIBRARY_PATH=[/tmp]/usr/local/[lib|lib64]
-    export CPLUS_INCLUDE_PATH=[/tmp]/usr/local/include
-    cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
-    make [DESTDIR=/tmp] install
-### 3.build leveldbjni
-    git clone https://github.com/halibobo1205/leveldbjni.git
-    export SNAPPY_HOME=[/tmp]/usr/local
-    export LEVELDB_HOME=[/tmp]/usr/local
-    mvn clean install -P xxx
     
