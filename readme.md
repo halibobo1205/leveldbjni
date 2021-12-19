@@ -10,7 +10,7 @@ that provides an ordered mapping from string keys to string values..
 
 #  Notice this repo important
 
-## this jni is based on leveldb 1.23 and snappy 1.8.
+## this jni is based on leveldb 1.23 and snappy 1.1.8.
 
 ## how to build
     > note: The following examples work on mac, linux, other platforms are not verified yet.
