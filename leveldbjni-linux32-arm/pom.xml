@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (C) 2011, FuseSource Corp.  All rights reserved.
-
+       Copyright (C) 2011, FuseSource Corp.  All rights reserved.
       http://fusesource.com
-
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are
   met:
-
      * Redistributions of source code must retain the above copyright
   notice, this list of conditions and the following disclaimer.
      * Redistributions in binary form must reproduce the above
@@ -17,7 +14,6 @@
      * Neither the name of FuseSource Corp. nor the names of its
   contributors may be used to endorse or promote products derived from
   this software without specific prior written permission.
-
   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -40,11 +36,11 @@
   </parent>
 
   <groupId>org.fusesource.leveldbjni</groupId>
-  <artifactId>leveldbjni-linux32</artifactId>
+  <artifactId>leveldbjni-linux64-aarch64</artifactId>
   <version>1.23</version>
   
   <name>${project.artifactId}</name>
-  <description>The leveldbjni linux 32 native libraries</description>
+  <description>The leveldbjni linux 64 native libraries on aarch64 machines</description>
       
   <dependencies>
     <dependency>
@@ -75,10 +71,10 @@
             <goals>
               <goal>build</goal>
             </goals>
-            <phase>compile</phase>
           </execution>
         </executions>
         <configuration>
+	  <platform>linux32/arm</platform>
           <name>leveldbjni</name>
           <classified>false</classified>
           <nativeSrcDependency>
@@ -94,6 +90,21 @@
             <arg>--with-snappy=${env.SNAPPY_HOME}</arg>
           </configureArgs>
         </configuration>
+      </plugin>
+      <plugin>                                                                                                                                                            
+        <groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-surefire-plugin</artifactId>
+	<version>2.4.3</version>
+	<configuration>
+	  <redirectTestOutputToFile>true</redirectTestOutputToFile>
+	  <forkMode>once</forkMode>
+	  <argLine>-d64 -ea</argLine>
+	  <failIfNoTests>false</failIfNoTests>
+	  <workingDirectory>${project.build.directory}</workingDirectory>
+	  <includes>
+	    <include>**/*Test.java</include>
+	  </includes>
+	</configuration>
       </plugin>
     </plugins>
   </build>

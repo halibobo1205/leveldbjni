@@ -337,6 +337,12 @@
         <module>leveldbjni-linux64-aarch64</module>
       </modules>
     </profile>
+    <profile>
+      <id>linux32-arm</id>
+      <modules>
+        <module>leveldbjni-linux32-arm</module>
+      </modules>
+    </profile>
 
 
   </profiles>
