@@ -1313,7 +1313,7 @@ ia64-*-hpux*)
   ;;
 
 x86_64-*kfreebsd*-gnu|x86_64-*linux*|ppc*-*linux*|powerpc*-*linux*| \
-s390*-*linux*|s390*-*tpf*|sparc*-*linux*|aarch64-*linux*)
+s390*-*linux*|s390*-*tpf*|sparc*-*linux*|aarch64-*linux*|arm-*linux*)
   # Find out which ABI we are using.
   echo 'int i;' > conftest.$ac_ext
   if AC_TRY_EVAL(ac_compile); then
@@ -1341,6 +1341,9 @@ s390*-*linux*|s390*-*tpf*|sparc*-*linux*|aarch64-*linux*)
           aarch64-*linux*)
             LD="${LD-ld} -m aarch64elf"
             ;;
+      arm*-*linux*)
+        LD="${LD-ld} -m armelf"
+        ;;
 	esac
 	;;
       *64-bit*)
@@ -1366,6 +1369,9 @@ s390*-*linux*|s390*-*tpf*|sparc*-*linux*|aarch64-*linux*)
           aarch64-*linux*)
             LD="${LD-ld} -m aarch64elf"
             ;;
+      arm*-*linux*)
+        LD="${LD-ld} -m armelf"
+        ;;
 	esac
 	;;
     esac

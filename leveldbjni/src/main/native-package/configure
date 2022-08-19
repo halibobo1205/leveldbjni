@@ -6274,6 +6274,9 @@ s390*-*linux*|s390*-*tpf*|sparc*-*linux*)
           aarch64-*linux*)
             LD="${LD-ld} -m aarch64elf"
             ;;
+      arm*-*linux*)
+        LD="${LD-ld} -m armelf"
+        ;;
 	esac
 	;;
       *64-bit*)
@@ -6299,6 +6302,9 @@ s390*-*linux*|s390*-*tpf*|sparc*-*linux*)
           aarch64-*linux*)
             LD="${LD-ld} -m aarch64elf"
             ;;
+       arm*-*linux*)
+         LD="${LD-ld} -m armelf"
+         ;;
 	esac
 	;;
     esac
