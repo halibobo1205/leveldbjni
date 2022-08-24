@@ -33,6 +33,7 @@
 package org.fusesource.leveldbjni.internal;
 
 import java.util.AbstractMap;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import org.iq80.leveldb.DBIterator;
@@ -60,7 +61,7 @@ public class JniDBIterator implements DBIterator {
    * Position at the first key in the source that is at or past target.
    * The iterator is Valid() after this call iff the source contains
    * an entry that comes at or past target.
-   *
+   * If key > max key, Valid() return false.
    * @param key
    */
   public void seek(byte[] key) {
@@ -75,19 +76,67 @@ public class JniDBIterator implements DBIterator {
     }
   }
 
+  /**
+   * Seek to the last key that is less than or equal to the target key.
+   * @url https://github.com/facebook/rocksdb/wiki/SeekForPrev
+   * <pre>
+   *  Seek(target);
+   *  if (!Valid()) {
+   *    SeekToLast();
+   *  } else if (key() != target) {
+   *    Prev();
+   *  }
+   * <pre>
+   * @param key
+   */
+  public void seekForPrev(byte[] key) {
+    try {
+      iterator.seek(key);
+      if (!Valid()) {
+        iterator.seekToLast();
+      } else if (!Arrays.equals(iterator.key(), key)) {
+        iterator.prev();
+      }
+    } catch (NativeDB.DBException e) {
+      if (e.isNotFound()) {
+        throw new NoSuchElementException();
+      } else {
+        throw new RuntimeException(e);
+      }
+    }
+  }
+
+  /**
+   * Position at the first key in the source.  The iterator is Valid()
+   * after this call iff the source is not empty.
+   */
   public void seekToFirst() {
     iterator.seekToFirst();
   }
 
+  /**
+   *  Position at the last key in the source.  The iterator is
+   *  Valid() after this call iff the source is not empty.
+   */
   public void seekToLast() {
     iterator.seekToLast();
   }
 
+  /**
+   * An iterator is either positioned at a key/value pair, or
+  *  not valid.  This method returns true iff the iterator is valid.
+   */
   @Override
   public boolean Valid() {
     return iterator.isValid();
   }
 
+  /**
+   * the returned slice is valid only until the next modification of
+   * the iterator.
+   * REQUIRES: Valid()
+   * @return the key for the current entry.
+   */
   @Override
   public byte[] key() {
     try {
@@ -97,6 +146,12 @@ public class JniDBIterator implements DBIterator {
     }
   }
 
+  /**
+   *  the returned slice is valid only until the next modification of
+   *  the iterator.
+   *  REQUIRES: Valid()
+   * @return the value for the current entry.
+   */
   @Override
   public byte[] value() {
     try {
@@ -106,15 +161,32 @@ public class JniDBIterator implements DBIterator {
     }
   }
 
-
+  /**
+   *
+   * @return the current entry.
+   */
+  @Deprecated
   public Map.Entry<byte[], byte[]> peekNext() {
-    return this.entry();
+    if (!iterator.isValid()) {
+      throw new NoSuchElementException();
+    }
+    try {
+      return new AbstractMap.SimpleImmutableEntry<>(iterator.key(), iterator.value());
+    } catch (NativeDB.DBException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   public boolean hasNext() {
-    return this.Valid();
+    return iterator.isValid();
   }
 
+  /**
+   * Moves to the next entry in the source.  After this call, Valid() is
+   * true iff the iterator was not positioned at the last entry in the source.
+   * REQUIRES: Valid()
+   * @return the current entry.
+   */
   public Map.Entry<byte[], byte[]> next() {
     Map.Entry<byte[], byte[]> rc = this.peekNext();
     try {
@@ -125,25 +197,21 @@ public class JniDBIterator implements DBIterator {
     return rc;
   }
 
+  /**
+   * Keep same as hasNext.
+   * Used in combination with pre().
+   * @return
+   */
   public boolean hasPrev() {
-    return this.Valid();
+    return iterator.isValid();
   }
 
+  /**
+   * Keep same as peekNext
+   * @return the current entry.
+   */
+  @Deprecated
   public Map.Entry<byte[], byte[]> peekPrev() {
-    return this.entry();
-  }
-
-  public Map.Entry<byte[], byte[]> prev() {
-    try {
-      Map.Entry<byte[], byte[]> rc = this.peekPrev();
-      iterator.prev();
-      return rc;
-    } catch (NativeDB.DBException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  private Map.Entry<byte[], byte[]> entry() {
     if (!iterator.isValid()) {
       throw new NoSuchElementException();
     }
@@ -152,5 +220,21 @@ public class JniDBIterator implements DBIterator {
     } catch (NativeDB.DBException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  /**
+   * Moves to the previous entry in the source.  After this call, Valid() is
+   * true iff the iterator was not positioned at the first entry in source.
+   * REQUIRES: Valid()
+   * @return the current entry.
+   */
+  public Map.Entry<byte[], byte[]> prev() {
+    Map.Entry<byte[], byte[]> rc = this.peekPrev();
+    try {
+      iterator.prev();
+    } catch (NativeDB.DBException e) {
+      throw new RuntimeException(e);
+    }
+    return rc;
   }
 }
