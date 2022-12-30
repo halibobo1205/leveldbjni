@@ -40,24 +40,32 @@
   </parent>
 
   <groupId>org.fusesource.leveldbjni</groupId>
-  <artifactId>leveldbjni-sunos64-amd64</artifactId>
+  <artifactId>leveldbjni-osx-aarch64</artifactId>
   <version>1.18.3</version>
   
   <name>${project.artifactId}</name>
-  <description>The leveldbjni solaris 64 native libraries on amd64 machines</description>
-      
+  <description>The leveldbjni OS X universal native libraries</description>
+
   <dependencies>
     <dependency>
       <groupId>org.fusesource.leveldbjni</groupId>
       <artifactId>leveldbjni</artifactId>
       <version>1.18.3</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.fusesource.leveldbjni</groupId>
+      <artifactId>leveldbjni</artifactId>
+      <version>1.18.3</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
     <testSourceDirectory>${basedir}/../leveldbjni/src/test/java</testSourceDirectory>
-     
     <plugins>
+      
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -66,6 +74,7 @@
           <classesDirectory>${basedir}/target/generated-sources/hawtjni/lib</classesDirectory>
         </configuration>
       </plugin>
+      
       <plugin>
         <groupId>org.fusesource.hawtjni</groupId>
         <artifactId>hawtjni-maven-plugin</artifactId>
@@ -76,9 +85,8 @@
               <goal>build</goal>
             </goals>
           </execution>
-        </executions>
+        </executions>        
         <configuration>
-	  <platform>sunos64/amd64</platform>
           <name>leveldbjni</name>
           <classified>false</classified>
           <nativeSrcDependency>
@@ -88,28 +96,12 @@
             <classifier>native-src</classifier>
             <type>zip</type>
           </nativeSrcDependency>
+          <platform>osx</platform>
           <configureArgs>
             <arg>--with-leveldb=${env.LEVELDB_HOME}</arg>
             <arg>--with-snappy=${env.SNAPPY_HOME}</arg>
-	    <arg>CFLAGS=-m64</arg>
-	    <arg>CXXFLAGS=-m64</arg>
           </configureArgs>
         </configuration>
-      </plugin>
-      <plugin>                                                                                                                                                            
-        <groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-surefire-plugin</artifactId>
-	<version>2.4.3</version>
-	<configuration>
-	  <redirectTestOutputToFile>true</redirectTestOutputToFile>
-	  <forkMode>once</forkMode>
-	  <argLine>-d64 -ea</argLine>
-	  <failIfNoTests>false</failIfNoTests>
-	  <workingDirectory>${project.build.directory}</workingDirectory>
-	  <includes>
-	    <include>**/*Test.java</include>
-	  </includes>
-	</configuration>
       </plugin>
     </plugins>
   </build>

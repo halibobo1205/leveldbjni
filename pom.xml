@@ -41,7 +41,7 @@
 
   <groupId>org.fusesource.leveldbjni</groupId>
   <artifactId>leveldbjni-project</artifactId>
-  <version>99-master-SNAPSHOT</version>
+  <version>1.18.3</version>
   <packaging>pom</packaging>
   
   <name>${project.artifactId}</name>
@@ -51,8 +51,8 @@
     <forge-project-id>leveldbjni</forge-project-id>
     <forge-project-id-uc>LEVELDBJNI</forge-project-id-uc>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <hawtjni-version>1.11</hawtjni-version>
-    <leveldb-api-version>0.6</leveldb-api-version>
+    <hawtjni-version>1.18</hawtjni-version>
+    <leveldb-api-version>1.18.3</leveldb-api-version>
   </properties>
   
   <modules>
@@ -244,6 +244,7 @@
       <id>full</id>
       <modules>
         <module>leveldbjni-osx</module>
+        <module>leveldbjni-osx-aarch64</module>
         <module>leveldbjni-linux32</module>
         <module>leveldbjni-linux64</module>
         <module>leveldbjni-freebsd64</module>
@@ -267,6 +268,13 @@
       <id>osx</id>
       <modules>
         <module>leveldbjni-osx</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>osx-aarch64</id>
+      <modules>
+        <module>leveldbjni-osx-aarch64</module>
       </modules>
     </profile>
 

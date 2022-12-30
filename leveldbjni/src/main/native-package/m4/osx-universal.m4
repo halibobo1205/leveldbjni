@@ -100,7 +100,7 @@ AC_DEFUN([WITH_OSX_UNIVERSAL],
         fi
       done
 
-      
+
       CFLAGS="-isysroot ${OSX_SDKS_DIR}/MacOSX${OSX_VERSION}.sdk $CFLAGS"
       CXXFLAGS="-isysroot ${OSX_SDKS_DIR}/MacOSX${OSX_VERSION}.sdk $CXXFLAGS"
       LDFLAGS="-syslibroot,${OSX_SDKS_DIR}/MacOSX${OSX_VERSION}.sdk $LDFLAGS"

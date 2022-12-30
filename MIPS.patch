@@ -1,0 +1,41 @@
+From ceff6f12152785a54885a47db349a6d8dfd0ce2c Mon Sep 17 00:00:00 2001
+From: David Turner <digit@google.com>
+Date: Wed, 17 Dec 2014 14:18:54 -0500
+Subject: [PATCH] Fix Android/MIPS build.
+
+port/atomic_pointer.h was missing an implementation for
+MemoryBarrier() for this platform.
+---
+ port/atomic_pointer.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/port/atomic_pointer.h b/port/atomic_pointer.h
+index 0f6f05e..1c4c7aa 100644
+--- a/port/atomic_pointer.h
++++ b/port/atomic_pointer.h
+@@ -39,6 +39,8 @@
+ #define ARCH_CPU_ARM64_FAMILY 1
+ #elif defined(__ppc__) || defined(__powerpc__) || defined(__powerpc64__)
+ #define ARCH_CPU_PPC_FAMILY 1
++#elif defined(__mips__)
++#define ARCH_CPU_MIPS_FAMILY 1
+ #endif
+ 
+ namespace leveldb {
+@@ -110,6 +112,13 @@ inline void MemoryBarrier() {
+ }
+ #define LEVELDB_HAVE_MEMORY_BARRIER
+ 
++// MIPS
++#elif defined(ARCH_CPU_MIPS_FAMILY) && defined(__GNUC__)
++inline void MemoryBarrier() {
++  __asm__ __volatile__("sync" : : : "memory");
++}
++#define LEVELDB_HAVE_MEMORY_BARRIER
++
+ #endif
+ 
+ // AtomicPointer built using platform-specific MemoryBarrier()
+-- 
+2.23.0
+

@@ -36,12 +36,12 @@
   <parent>
     <groupId>org.fusesource.leveldbjni</groupId>
     <artifactId>leveldbjni-project</artifactId>
-    <version>99-master-SNAPSHOT</version>
+    <version>1.18.3</version>
   </parent>
 
   <groupId>org.fusesource.leveldbjni</groupId>
   <artifactId>leveldbjni</artifactId>
-  <version>99-master-SNAPSHOT</version>
+  <version>1.18.3</version>
   <packaging>jar</packaging>
   
   <name>${project.artifactId}</name>
@@ -58,7 +58,7 @@
       <version>${hawtjni-version}</version>
     </dependency>
     <dependency>
-      <groupId>org.iq80.leveldb</groupId>
+      <groupId>io.github.tronprotocol</groupId>
       <artifactId>leveldb-api</artifactId>
       <version>${leveldb-api-version}</version>
     </dependency>
@@ -90,7 +90,7 @@
 
       <plugin>
         <groupId>org.fusesource.hawtjni</groupId>
-        <artifactId>maven-hawtjni-plugin</artifactId>
+        <artifactId>hawtjni-maven-plugin</artifactId>
         <version>${hawtjni-version}</version>
         <executions>
           <execution>
@@ -201,7 +201,7 @@
                 <pluginExecution>
                   <pluginExecutionFilter>
                     <groupId>org.fusesource.hawtjni</groupId>
-                    <artifactId>maven-hawtjni-plugin</artifactId>
+                    <artifactId>hawtjni-maven-plugin</artifactId>
                     <versionRange>[1.11,)</versionRange>
                     <goals>
                       <goal>generate</goal>

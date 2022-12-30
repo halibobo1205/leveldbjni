@@ -198,6 +198,7 @@ See also [releasing.md](releasing.md):
 
 * GNU compiler toolchain
 * [Maven 3](http://maven.apache.org/download.html)
+* automake 1.14+
 
 ### Supported Platforms
 
