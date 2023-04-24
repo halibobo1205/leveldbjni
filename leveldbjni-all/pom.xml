@@ -176,7 +176,7 @@
           <optional>true</optional>
         </dependency>
         <dependency>
-          <groupId>io.github.tronprotocol</groupId>
+          <groupId>com.halibobor</groupId>
           <artifactId>leveldb-api</artifactId>
           <version>${leveldb-api-version}</version>
           <classifier>sources</classifier>
